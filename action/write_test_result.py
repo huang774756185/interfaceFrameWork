@@ -1,0 +1,19 @@
+#encoding=utf-8
+from config.public_data import *
+
+def write_result(wbObj, sheetObj, responseData, errorKey, rowNum):
+    try:
+        # 写响应body
+        wbObj.writeCell(sheet = sheetObj, content= "%s" %responseData,
+                        rowNo = rowNum, colsNo=CASE_responseData)
+        # 写校验结果状态列及错误信息列
+        if errorKey:
+            wbObj.writeCell(sheet=sheetObj,content="faild",rowNo=rowNum,colsNo=CASE_status)
+            wbObj.writeCell(sheet=sheetObj,content="%s" %errorKey,rowNo=rowNum,colsNo=CASE_errorInfo)
+        else:
+            wbObj.writeCell(sheet=sheetObj, content="pass",rowNo=rowNum, colsNo=CASE_status)
+            # 第二次执行成功后需要清空errorInfo中的信息
+            wbObj.writeCell(sheet=sheetObj, content="", rowNo=rowNum, colsNo=CASE_errorInfo)
+
+    except Exception, e:
+        raise e
